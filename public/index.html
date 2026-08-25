@@ -250,6 +250,9 @@
     background:oklch(0.97 0.002 255);color:var(--ink);font-size:15px;outline:none;
   }
   input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px oklch(0.52 0.14 235 / 0.18);}
+  input[type="number"]{appearance:textfield;-moz-appearance:textfield;}
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
   .select-wrap{position:relative;}
   .select-wrap select{appearance:none;-webkit-appearance:none;padding-right:36px;cursor:pointer;}
   .select-wrap .select-chevron{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;}
@@ -423,8 +426,8 @@
           </div>
           <form id="periodForm">
             <label>Tanggal Mulai Periode (1-31)</label>
-            <input id="pStartDay" type="number" min="1" max="31" required>
-            <button type="submit" class="btn-submit">Simpan Periode</button>
+            <input id="pStartDay" type="number" min="1" max="31" required style="max-width:110px;">
+            <button type="submit" class="btn-submit" style="max-width:200px;">Simpan Periode</button>
           </form>
         </div>
         <div class="card">
@@ -562,6 +565,7 @@
 <script>
   const idr = n => new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(n||0);
   const fmtDate = s => new Date(s + 'T00:00:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+  const fmtDateTime = s => new Date(s.replace(' ', 'T')).toLocaleString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
   const unmask = str => Number(String(str || '').replace(/\D/g, ''));
   function attachThousandMask(input){
     input.addEventListener('input', () => {
@@ -862,7 +866,7 @@
         ${avatar(t.kategori, color, 44, 13)}
         <div class="tx-cat">
           <div class="name">${t.kategori}</div>
-          ${t.catatan ? `<div class="tx-note">${t.catatan}</div>` : ''}
+          <div class="tx-note">${fmtDateTime(t.createdAt)}${t.catatan ? ` · ${t.catatan}` : ''}</div>
         </div>
         <div class="tx-amt ${t.tipe==='Pemasukan'?'in':'out'}">${t.tipe==='Pemasukan'?'+':'-'}${idr(t.jumlah)}</div>
       </div>`;

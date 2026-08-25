@@ -7,6 +7,11 @@ const { checkOverBudget } = require('./budget');
 const { verifyPassword, createToken, verifyToken } = require('./auth');
 const { currentPeriod, toDateStr } = require('./period');
 
+function toDateTimeStr(d) {
+  const pad = n => String(n).padStart(2, '0');
+  return `${toDateStr(d)} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+
 const config = JSON.parse(fs.readFileSync(path.join(__dirname, 'config.json'), 'utf8'));
 const { loginUser, passwordSalt, passwordHash, ...dbConfig } = config;
 const pool = mysql.createPool(dbConfig);
@@ -132,7 +137,7 @@ app.get('/api/data', async (req, res) => {
       [startStr, endStr]
     );
     const [tx] = await pool.query(
-      'SELECT tanggal, tipe, kategori, jumlah, catatan FROM transactions WHERE tanggal BETWEEN ? AND ? ORDER BY tanggal DESC, id DESC LIMIT 500',
+      'SELECT tanggal, tipe, kategori, jumlah, catatan, created_at FROM transactions WHERE tanggal BETWEEN ? AND ? ORDER BY tanggal DESC, id DESC LIMIT 500',
       [startStr, endStr]
     );
 
@@ -157,7 +162,14 @@ app.get('/api/data', async (req, res) => {
     const totalKeluar = Number((totalRows.find(r => r.tipe === 'Pengeluaran') || {}).total || 0);
 
     res.json({
-      transactions: tx.map(t => ({ ...t, jumlah: Number(t.jumlah), tanggal: String(t.tanggal).slice(0, 10) })),
+      transactions: tx.map(t => ({
+        tanggal: toDateStr(t.tanggal),
+        tipe: t.tipe,
+        kategori: t.kategori,
+        jumlah: Number(t.jumlah),
+        catatan: t.catatan,
+        createdAt: toDateTimeStr(t.created_at)
+      })),
       budgets,
       incomeCategories,
       totalMasuk,
