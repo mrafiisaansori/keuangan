@@ -89,6 +89,7 @@
   .bottomnav{display:none;}
   @media (max-width: 860px){
     .sidebar{display:none;}
+    .topbar{display:none;}
     .bottomnav{
       display:flex;position:fixed;left:0;right:0;bottom:0;z-index:20;
       background:oklch(0.99 0 0 / 0.95);backdrop-filter:blur(14px);
@@ -142,7 +143,8 @@
   .chart-value{flex:none;font-size:13px;font-weight:700;text-align:right;color:var(--ink);font-variant-numeric:tabular-nums;}
 
   /* ---------- budget list / crud ---------- */
-  .budget-item{padding:13px 0;border-bottom:1px solid var(--hairline);}
+  .budget-item{padding:13px 8px;margin:0 -8px;border-radius:12px;border-bottom:1px solid var(--hairline);transition:background .12s;}
+  .budget-item:hover{background:var(--surface-2);}
   .budget-item:last-child{border-bottom:0;}
   .budget-top{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;margin-bottom:7px;gap:8px;}
   .budget-top .cat{display:flex;align-items:center;gap:10px;font-weight:600;color:var(--ink);min-width:0;}
@@ -170,6 +172,14 @@
   .icon-btn svg{pointer-events:none;}
   .icon-btn:hover{background:var(--surface-2);color:var(--ink);}
   .icon-btn.danger:hover{color:var(--critical);background:oklch(0.62 0.19 25 / 0.12);}
+
+  .filter-pill{
+    padding:9px 16px;border-radius:12px;background:var(--surface);
+    box-shadow:0 2px 8px oklch(0.4 0.03 255 / 0.06);border:0;
+    font-size:12.5px;font-weight:600;color:var(--ink-2);min-height:36px;
+    display:flex;align-items:center;cursor:pointer;font-family:inherit;
+  }
+  .filter-pill.active{background:var(--accent);color:#fff;font-weight:700;box-shadow:none;}
 
   /* ---------- transaksi list ---------- */
   .tx-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--hairline);}
@@ -427,18 +437,38 @@
       </section>
 
       <section class="view" data-view="transaksi" hidden>
-        <div style="display:flex;gap:8px;" title="Filter belum tersedia">
-          <div style="padding:9px 16px;border-radius:12px;background:var(--accent);font-size:12.5px;font-weight:700;color:#fff;min-height:36px;display:flex;align-items:center;">Semua</div>
-          <div style="padding:9px 16px;border-radius:12px;background:var(--surface);box-shadow:0 2px 8px oklch(0.4 0.03 255 / 0.06);font-size:12.5px;font-weight:600;color:var(--ink-2);min-height:36px;display:flex;align-items:center;">Masuk</div>
-          <div style="padding:9px 16px;border-radius:12px;background:var(--surface);box-shadow:0 2px 8px oklch(0.4 0.03 255 / 0.06);font-size:12.5px;font-weight:600;color:var(--ink-2);min-height:36px;display:flex;align-items:center;">Keluar</div>
+        <div style="display:flex;gap:8px;">
+          <button type="button" class="filter-pill active" data-filter="Semua">Semua</button>
+          <button type="button" class="filter-pill" data-filter="Pemasukan">Masuk</button>
+          <button type="button" class="filter-pill" data-filter="Pengeluaran">Keluar</button>
         </div>
         <div id="txList" style="margin-top:14px;"><div class="empty">Memuat...</div></div>
       </section>
 
       <section class="view" data-view="laporan" hidden>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;">
+          <div class="card" style="padding:14px;text-align:center;">
+            <div style="font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;">Limit</div>
+            <div id="repSumLimit" style="font-size:14.5px;font-weight:800;color:var(--ink);font-family:'Plus Jakarta Sans',sans-serif;margin-top:4px;overflow-wrap:anywhere;">-</div>
+          </div>
+          <div class="card" style="padding:14px;text-align:center;">
+            <div style="font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;">Terpakai</div>
+            <div id="repSumTerpakai" style="font-size:14.5px;font-weight:800;color:var(--blue);font-family:'Plus Jakarta Sans',sans-serif;margin-top:4px;overflow-wrap:anywhere;">-</div>
+          </div>
+          <div class="card" style="padding:14px;text-align:center;">
+            <div style="font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;">Sisa</div>
+            <div id="repSumSisa" style="font-size:14.5px;font-weight:800;color:var(--good);font-family:'Plus Jakarta Sans',sans-serif;margin-top:4px;overflow-wrap:anywhere;">-</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h2>Budget vs Realisasi per Kategori</h2></div>
+          <div id="reportVisual"><div class="empty">Memuat...</div></div>
+        </div>
+
         <div class="card">
           <div class="card-head">
-            <h2>Ringkasan Budget vs Realisasi</h2>
+            <h2>Rincian</h2>
             <button class="btn-small no-print" id="btnPrint" style="display:flex;align-items:center;gap:6px"><svg width="16" height="16"><use href="#ic-laporan"/></svg>Cetak</button>
           </div>
           <div style="overflow-x:auto">
@@ -481,7 +511,7 @@
 
     <label>Kategori</label>
     <select id="fKategori" style="display:none"></select>
-    <div id="fKategoriGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:4px;"></div>
+    <div id="fKategoriGrid" style="display:flex;flex-wrap:wrap;gap:12px 10px;margin-bottom:4px;"></div>
     <input id="fKategoriCustom" placeholder="Nama kategori">
 
     <label>Tanggal</label>
@@ -535,6 +565,8 @@
   let currentTipe = 'Pemasukan';
   let budgets = [];
   let incomeCategories = [];
+  let allTransactions = [];
+  let txFilter = 'Semua';
   let editingBudgetId = null;
   let editingBudgetTipe = null;
 
@@ -573,7 +605,8 @@
     const inner = iconFn
       ? `<svg width="${Math.round(size * 0.45)}" height="${Math.round(size * 0.45)}" viewBox="0 0 20 20" fill="none">${iconFn(color)}</svg>`
       : (kategori || '?').trim().charAt(0).toUpperCase();
-    return `<span class="avatar" style="width:${size}px;height:${size}px;border-radius:${radius}px;background:color-mix(in oklch, ${color} 18%, white);color:${color}">${inner}</span>`;
+    const fontSize = Math.round(size * 0.4);
+    return `<span class="avatar" style="width:${size}px;height:${size}px;border-radius:${radius}px;background:color-mix(in oklch, ${color} 18%, white);color:${color};font-size:${fontSize}px">${inner}</span>`;
   }
   function toast(msg, ok){
     const t = document.getElementById('toast');
@@ -620,8 +653,8 @@
       const inner = iconFn
         ? `<svg width="24" height="24" viewBox="0 0 20 20" fill="none">${iconFn(iconColor)}</svg>`
         : b.kategori.trim().charAt(0).toUpperCase();
-      return `<button type="button" class="kategori-tile" data-kategori="${b.kategori}" style="display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;padding:0;font-family:inherit;cursor:pointer;">
-        <span class="avatar" style="width:52px;height:52px;border-radius:15px;background:${bg};color:${iconColor}">${inner}</span>
+      return `<button type="button" class="kategori-tile" data-kategori="${b.kategori}" style="flex:0 0 68px;display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;padding:0;font-family:inherit;cursor:pointer;">
+        <span class="avatar" style="width:52px;height:52px;border-radius:15px;background:${bg};color:${iconColor};font-size:21px">${inner}</span>
         <span style="font-size:10.5px;font-weight:600;color:${selected ? 'var(--ink)' : 'var(--ink-2)'};overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:64px;">${b.kategori}</span>
       </button>`;
     }).join('');
@@ -785,8 +818,8 @@
     }).join('');
   }
 
-  function renderBudgets(list){
-    const el = document.getElementById('budgetList');
+  function renderBudgets(list, elId){
+    const el = document.getElementById(elId || 'budgetList');
     if (!list.length){ el.innerHTML = '<div class="empty">Belum ada data budget.</div>'; return; }
     el.innerHTML = list.map((b, i) => {
       const pct = b.limit > 0 ? Math.min(100, (b.terpakai / b.limit) * 100) : 0;
@@ -817,8 +850,18 @@
     return fmtDate(tanggal);
   }
 
+  document.querySelectorAll('.filter-pill').forEach(btn => {
+    btn.onclick = () => {
+      txFilter = btn.dataset.filter;
+      document.querySelectorAll('.filter-pill').forEach(b => b.classList.toggle('active', b === btn));
+      renderTx(allTransactions);
+    };
+  });
+
   function renderTx(list){
+    allTransactions = list;
     const el = document.getElementById('txList');
+    if (txFilter !== 'Semua') list = list.filter(t => t.tipe === txFilter);
     if (!list.length){ el.innerHTML = '<div class="empty">Belum ada transaksi.</div>'; return; }
     let lastGroup = null;
     el.innerHTML = list.map(t => {
@@ -839,7 +882,13 @@
 
   function renderReport(){
     const body = document.getElementById('reportBody');
-    if (!budgets.length){ body.innerHTML = '<tr><td colspan="5" class="empty">Belum ada data.</td></tr>'; return; }
+    if (!budgets.length){
+      body.innerHTML = '<tr><td colspan="5" class="empty">Belum ada data.</td></tr>';
+      document.getElementById('repSumLimit').textContent = idr(0);
+      document.getElementById('repSumTerpakai').textContent = idr(0);
+      document.getElementById('repSumSisa').textContent = idr(0);
+      return;
+    }
     let totalLimit = 0, totalTerpakai = 0;
     body.innerHTML = budgets.map(b => {
       totalLimit += b.limit; totalTerpakai += b.terpakai;
@@ -856,6 +905,9 @@
     document.getElementById('repTotalLimit').textContent = idr(totalLimit);
     document.getElementById('repTotalTerpakai').textContent = idr(totalTerpakai);
     document.getElementById('repTotalSisa').textContent = idr(totalLimit - totalTerpakai);
+    document.getElementById('repSumLimit').textContent = idr(totalLimit);
+    document.getElementById('repSumTerpakai').textContent = idr(totalTerpakai);
+    document.getElementById('repSumSisa').textContent = idr(totalLimit - totalTerpakai);
   }
   document.getElementById('btnPrint').onclick = () => window.print();
 
@@ -895,6 +947,7 @@
       renderStats(data);
       renderChart();
       renderBudgets(budgets);
+      renderBudgets(budgets, 'reportVisual');
       renderBudgetSummary();
       renderCrudList('incomeCrud', incomeCategories, 'Pemasukan');
       renderCrudList('budgetCrud', budgets, 'Pengeluaran');
