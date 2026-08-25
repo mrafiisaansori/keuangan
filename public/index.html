@@ -191,6 +191,17 @@
   .tx-amt.in{color:var(--good);}
   .tx-amt.out{color:var(--critical);}
 
+  /* ---------- laporan summary ---------- */
+  .rep-sum-item{flex:1;min-width:0;padding:14px;text-align:center;display:flex;flex-direction:column;gap:4px;}
+  .rep-sum-item:not(:last-child){border-right:1px solid var(--hairline);}
+  .rep-sum-label{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+  .rep-sum-val{font-size:14.5px;font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;color:var(--ink);overflow-wrap:anywhere;}
+  @media (max-width: 480px){
+    .rep-summary{flex-direction:column;}
+    .rep-sum-item{flex-direction:row;justify-content:space-between;align-items:center;text-align:left;padding:12px 16px;}
+    .rep-sum-item:not(:last-child){border-right:0;border-bottom:1px solid var(--hairline);}
+  }
+
   /* ---------- laporan table ---------- */
   .report-table{width:100%;border-collapse:collapse;font-size:13px;}
   .report-table th{font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);
@@ -230,6 +241,7 @@
   @media (max-width: 860px){ .fab{ bottom:90px; } }
 
   dialog{border:1px solid var(--border);border-radius:20px;padding:22px;background:var(--surface);color:var(--ink);width:100%;max-width:400px;
+    max-height:min(640px, calc(100vh - 32px));max-height:min(640px, calc(100dvh - 32px));overflow-y:auto;
     box-shadow:0 12px 40px oklch(0.4 0.03 255 / 0.14);}
   dialog::backdrop{background:rgba(0,0,0,0.5);backdrop-filter:blur(2px);}
   dialog h2{font-family:'Plus Jakarta Sans',sans-serif;margin:0 0 16px;font-size:14px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);}
@@ -446,18 +458,18 @@
       </section>
 
       <section class="view" data-view="laporan" hidden>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;">
-          <div class="card" style="padding:14px;text-align:center;">
-            <div style="font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;">Limit</div>
-            <div id="repSumLimit" style="font-size:14.5px;font-weight:800;color:var(--ink);font-family:'Plus Jakarta Sans',sans-serif;margin-top:4px;overflow-wrap:anywhere;">-</div>
+        <div class="card rep-summary" style="display:flex;padding:0;margin-bottom:16px;">
+          <div class="rep-sum-item">
+            <span class="rep-sum-label">Limit</span>
+            <span id="repSumLimit" class="rep-sum-val">-</span>
           </div>
-          <div class="card" style="padding:14px;text-align:center;">
-            <div style="font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;">Terpakai</div>
-            <div id="repSumTerpakai" style="font-size:14.5px;font-weight:800;color:var(--blue);font-family:'Plus Jakarta Sans',sans-serif;margin-top:4px;overflow-wrap:anywhere;">-</div>
+          <div class="rep-sum-item">
+            <span class="rep-sum-label">Terpakai</span>
+            <span id="repSumTerpakai" class="rep-sum-val" style="color:var(--blue)">-</span>
           </div>
-          <div class="card" style="padding:14px;text-align:center;">
-            <div style="font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;">Sisa</div>
-            <div id="repSumSisa" style="font-size:14.5px;font-weight:800;color:var(--good);font-family:'Plus Jakarta Sans',sans-serif;margin-top:4px;overflow-wrap:anywhere;">-</div>
+          <div class="rep-sum-item">
+            <span class="rep-sum-label">Sisa</span>
+            <span id="repSumSisa" class="rep-sum-val" style="color:var(--good)">-</span>
           </div>
         </div>
 
