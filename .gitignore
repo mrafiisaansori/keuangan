@@ -2,3 +2,8 @@ node_modules
 config.json
 credentials.json
 .DS_Store
+
+# Claude Code skills installed locally via `npx skills add` — tooling, bukan bagian app
+.agents/
+.claude/
+skills-lock.json
