@@ -104,22 +104,12 @@
   }
 
   /* ---------- shared cards ---------- */
-  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;}
-  .stat{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:16px;min-width:0;container-type:inline-size;
-    box-shadow:0 2px 10px oklch(0.4 0.03 255 / 0.06);}
-  .stat .label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .stat .val{
-    font-family:'Plus Jakarta Sans',sans-serif;
-    font-size:20px; /* fallback kalau browser belum dukung container query units */
-    font-size:clamp(15px, 11cqw, 26px);
-    font-weight:700;letter-spacing:-.3px;margin-top:6px;font-variant-numeric:tabular-nums;
-    overflow-wrap:anywhere;line-height:1.15;
+  #totalNet{font-size:20px;font-size:clamp(20px,7cqw,29px);overflow-wrap:anywhere;} /* fallback + fluid cap kalau nominal besar */
+  #statLewat{
+    font-family:'Inter',sans-serif;background:oklch(0.62 0.19 25 / 0.12);color:var(--critical);
+    display:inline-flex;align-items:center;
   }
-  .stat.masuk .val{color:var(--good);}
-  .stat.keluar .val{color:var(--ink);}
-  .stat.saldo .val{color:var(--blue);}
-  .stat.lewat .val{color:var(--critical);}
-  .stat.lewat.zero .val{color:var(--good);}
+  #statLewat.zero{background:oklch(0.50 0.14 152 / 0.12);color:var(--good);}
 
   .card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:18px;
     box-shadow:0 2px 10px oklch(0.4 0.03 255 / 0.06);}
@@ -132,30 +122,36 @@
   .empty{color:var(--muted);font-size:13px;text-align:center;padding:14px 0;}
   .dot{width:8px;height:8px;border-radius:50%;flex:none;}
   .avatar{
-    width:32px;height:32px;border-radius:12px;flex:none;
+    width:40px;height:40px;border-radius:12px;flex:none;
     display:flex;align-items:center;justify-content:center;
-    font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;
+    font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;
   }
+  .quick-action{display:flex;flex-direction:column;align-items:center;gap:7px;text-decoration:none;background:none;border:0;padding:0;font-family:inherit;cursor:pointer;}
+  .quick-action .ic-box{width:48px;height:48px;border-radius:15px;background:var(--surface);box-shadow:0 2px 8px oklch(0.4 0.03 255 / 0.08);display:flex;align-items:center;justify-content:center;}
+  .quick-action .lbl{font-size:11px;font-weight:600;color:var(--ink-2);}
+  .tx-group-label{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:14px 0 6px;}
+  .tx-group-label:first-child{margin-top:0;}
 
   /* ---------- dashboard chart ---------- */
-  .chart-row{display:grid;grid-template-columns:minmax(60px,130px) 1fr minmax(0,auto);gap:10px;align-items:center;margin-bottom:11px;}
-  .chart-row:last-child{margin-bottom:0;}
-  .chart-label{display:flex;align-items:center;gap:7px;min-width:0;font-size:12.5px;font-weight:600;}
-  .chart-label .name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .chart-track{height:18px;border-radius:4px;background:var(--hairline);overflow:hidden;}
-  .chart-fill{height:100%;border-radius:0 4px 4px 0;}
-  .chart-value{min-width:0;font-size:12px;text-align:right;color:var(--ink-2);font-variant-numeric:tabular-nums;overflow-wrap:anywhere;}
+  .chart-row{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--hairline);}
+  .chart-row:last-child{border-bottom:0;}
+  .chart-label{flex:1;min-width:0;}
+  .chart-label .name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700;font-size:13.5px;color:var(--ink);}
+  .chart-track{height:6px;border-radius:4px;background:var(--hairline);overflow:hidden;margin-top:6px;}
+  .chart-fill{height:100%;border-radius:4px;transition:width .4s;}
+  .chart-value{flex:none;font-size:13px;font-weight:700;text-align:right;color:var(--ink);font-variant-numeric:tabular-nums;}
 
   /* ---------- budget list / crud ---------- */
-  .budget-item{margin-bottom:14px;}
-  .budget-item:last-child{margin-bottom:0;}
-  .budget-top{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;margin-bottom:6px;gap:8px;}
-  .budget-top .cat{display:flex;align-items:center;gap:7px;font-weight:600;color:var(--ink);min-width:0;}
+  .budget-item{padding:13px 0;border-bottom:1px solid var(--hairline);}
+  .budget-item:last-child{border-bottom:0;}
+  .budget-top{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;margin-bottom:7px;gap:8px;}
+  .budget-top .cat{display:flex;align-items:center;gap:10px;font-weight:600;color:var(--ink);min-width:0;}
   .budget-top .cat span.name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .budget-top .amt{color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums;}
-  .bar-track{height:7px;border-radius:6px;background:var(--hairline);overflow:hidden;}
+  .budget-top .amt .of{color:oklch(0.75 0.01 255);}
+  .bar-track{height:8px;border-radius:6px;background:var(--hairline);overflow:hidden;}
   .bar-fill{height:100%;border-radius:6px;transition:width .4s;}
-  .budget-pct{font-size:11px;color:var(--muted);margin-top:4px;text-align:right;font-variant-numeric:tabular-nums;}
+  .budget-over-note{display:flex;align-items:center;gap:5px;margin-top:6px;color:var(--critical);font-size:11px;font-weight:600;}
 
   .crud-row{
     display:flex;align-items:center;gap:10px;padding:9px 8px;margin:0 -8px;
@@ -176,24 +172,14 @@
   .icon-btn.danger:hover{color:var(--critical);background:oklch(0.62 0.19 25 / 0.12);}
 
   /* ---------- transaksi list ---------- */
-  .tx-head,.tx-row{
-    display:grid;grid-template-columns:78px 1fr 100px 1fr;gap:10px;align-items:center;padding:9px 0;
-  }
-  .tx-head{font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);border-bottom:1px solid var(--hairline);}
-  .tx-row{border-bottom:1px solid var(--hairline);font-size:13px;}
+  .tx-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--hairline);}
   .tx-row:last-child{border-bottom:0;}
-  .tx-date{color:var(--muted);font-size:11.5px;font-variant-numeric:tabular-nums;}
-  .tx-cat{display:flex;align-items:center;gap:7px;min-width:0;}
-  .tx-cat .name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;}
-  .tx-amt{font-weight:700;text-align:right;font-variant-numeric:tabular-nums;}
+  .tx-cat{flex:1;min-width:0;}
+  .tx-cat .name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700;font-size:13.5px;color:var(--ink);}
+  .tx-note{color:var(--muted);font-size:11.5px;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .tx-amt{font-weight:700;font-size:13.5px;text-align:right;font-variant-numeric:tabular-nums;flex:none;}
   .tx-amt.in{color:var(--good);}
-  .tx-amt.out{color:var(--ink);}
-  .tx-note{color:var(--muted);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  @media (max-width: 560px){
-    .tx-head{display:none;}
-    .tx-row{grid-template-columns:1fr auto;grid-template-areas:"cat amt" "date note";row-gap:3px;}
-    .tx-cat{grid-area:cat;} .tx-amt{grid-area:amt;} .tx-date{grid-area:date;} .tx-note{grid-area:note;text-align:right;}
-  }
+  .tx-amt.out{color:var(--critical);}
 
   /* ---------- laporan table ---------- */
   .report-table{width:100%;border-collapse:collapse;font-size:13px;}
@@ -228,7 +214,8 @@
     position:fixed;right:20px;bottom:20px;z-index:20;
     width:56px;height:56px;border-radius:50%;border:0;
     background:var(--accent);color:#fff;
-    font-size:26px;font-weight:700;line-height:1;box-shadow:0 8px 24px oklch(0.52 0.14 235 / 0.35);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 24px oklch(0.52 0.14 235 / 0.35);
   }
   @media (max-width: 860px){ .fab{ bottom:90px; } }
 
@@ -332,23 +319,83 @@
 
     <div class="content">
       <section class="view" data-view="dashboard">
-        <div class="stats">
-          <div class="stat masuk"><div class="label">Masuk</div><div class="val" id="totalIn">-</div></div>
-          <div class="stat keluar"><div class="label">Keluar</div><div class="val" id="totalOut">-</div></div>
-          <div class="stat saldo"><div class="label">Saldo</div><div class="val" id="totalNet">-</div></div>
-          <div class="stat lewat" id="statLewat"><div class="label">Lewat Limit</div><div class="val" id="totalOver">-</div></div>
+        <div style="background:var(--accent);padding:24px 20px 36px;border-radius:0 0 28px 28px;margin:-20px -24px 0;">
+          <span style="font-size:19px;font-weight:800;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-.2px;">Dompet</span>
+          <div style="margin-top:18px;background:var(--surface);border-radius:20px;padding:18px 18px 16px;box-shadow:0 12px 28px oklch(0.30 0.10 235 / 0.22);container-type:inline-size;">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <span style="font-size:12.5px;font-weight:600;color:var(--muted);">Saldo Bersih</span>
+              <div style="width:26px;height:26px;border-radius:8px;background:oklch(0.94 0.02 235);display:flex;align-items:center;justify-content:center;">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M2 8c1.5-3 4-4.5 6-4.5s4.5 1.5 6 4.5c-1.5 3-4 4.5-6 4.5S3.5 11 2 8Z" stroke="var(--blue)" stroke-width="1.4"/><circle cx="8" cy="8" r="1.8" fill="var(--blue)"/></svg>
+              </div>
+            </div>
+            <div id="totalNet" style="font-weight:800;color:var(--ink);margin-top:6px;font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-.5px;font-variant-numeric:tabular-nums;">-</div>
+            <div style="display:flex;gap:16px;margin-top:12px;">
+              <div style="display:flex;align-items:center;gap:6px;">
+                <svg width="14" height="14" viewBox="0 0 16 16"><path d="M8 12V4M4 7l4-4 4 4" stroke="var(--good)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+                <span style="font-size:12px;color:var(--muted);">Masuk <b id="totalIn" style="color:var(--ink-2);font-weight:700;">-</b></span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <svg width="14" height="14" viewBox="0 0 16 16"><path d="M8 4v8M4 9l4 4 4-4" stroke="var(--critical)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+                <span style="font-size:12px;color:var(--muted);">Keluar <b id="totalOut" style="color:var(--ink-2);font-weight:700;">-</b></span>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="card">
+
+        <div style="margin-top:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+          <a href="#dashboard" class="quick-action">
+            <div class="ic-box"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="6" height="6" rx="1.4" stroke="var(--blue)" stroke-width="1.6"/><rect x="11" y="3" width="6" height="6" rx="1.4" stroke="var(--blue)" stroke-width="1.6"/><rect x="3" y="11" width="6" height="6" rx="1.4" stroke="var(--blue)" stroke-width="1.6"/><rect x="11" y="11" width="6" height="6" rx="1.4" stroke="var(--blue)" stroke-width="1.6"/></svg></div>
+            <span class="lbl">Ringkasan</span>
+          </a>
+          <button type="button" class="quick-action" id="btnQuickAdd">
+            <div class="ic-box"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 3v14M4 8l6-5 6 5" stroke="var(--blue)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <span class="lbl">Catat</span>
+          </button>
+          <a href="#budget" class="quick-action">
+            <div class="ic-box"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="var(--blue)" stroke-width="1.6"/><circle cx="10" cy="10" r="2.4" fill="var(--blue)"/></svg></div>
+            <span class="lbl">Budget</span>
+          </a>
+          <a href="#laporan" class="quick-action">
+            <div class="ic-box"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="4" y="3" width="12" height="14" rx="2" stroke="var(--blue)" stroke-width="1.6"/><line x1="7" y1="8" x2="13" y2="8" stroke="var(--blue)" stroke-width="1.4" stroke-linecap="round"/><line x1="7" y1="11.5" x2="13" y2="11.5" stroke="var(--blue)" stroke-width="1.4" stroke-linecap="round"/></svg></div>
+            <span class="lbl">Laporan</span>
+          </a>
+        </div>
+
+        <div class="card" style="margin-top:20px;">
           <div class="card-head"><h2>Pengeluaran per Kategori</h2></div>
           <div id="chartOut"><div class="empty">Memuat...</div></div>
         </div>
         <div class="card">
-          <div class="card-head"><h2>Budget Bulan Ini</h2></div>
+          <div class="card-head">
+            <h2>Budget Bulan Ini</h2>
+            <span id="statLewat" class="zero" style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;"><span id="totalOver">0</span> lewat limit</span>
+          </div>
           <div id="budgetList"><div class="empty">Memuat...</div></div>
         </div>
       </section>
 
       <section class="view" data-view="budget" hidden>
+        <div style="border-radius:22px;padding:18px;display:flex;align-items:center;gap:14px;background:var(--accent);margin-bottom:16px;">
+          <svg width="88" height="76" viewBox="0 0 160 120" style="flex:none;">
+            <ellipse cx="72" cy="132" rx="6" ry="9" fill="oklch(0.40 0.10 230)"/>
+            <ellipse cx="102" cy="132" rx="6" ry="9" fill="oklch(0.40 0.10 230)"/>
+            <path d="M18 78c0-30 24-46 54-46s54 16 54 46c0 22-16 34-30 38l2 14H46l2-14C34 112 18 100 18 78Z" fill="oklch(0.88 0.06 235)"/>
+            <ellipse cx="118" cy="70" rx="16" ry="12" fill="oklch(0.82 0.08 235)"/>
+            <circle cx="126" cy="66" r="2.6" fill="oklch(0.30 0.02 235)"/>
+            <path d="M52 40c-6-10-2-22 8-24 4 8 2 18-8 24Z" fill="oklch(0.82 0.08 235)"/>
+            <rect x="66" y="34" width="18" height="5" rx="2.5" fill="oklch(0.55 0.12 235)" transform="rotate(-8 75 36)"/>
+            <circle cx="86" cy="6" r="15" fill="oklch(0.78 0.15 85)"/>
+            <circle cx="86" cy="6" r="15" fill="none" stroke="oklch(0.65 0.15 85)" stroke-width="2"/>
+            <text x="86" y="11" font-size="13" font-weight="800" fill="oklch(0.45 0.10 85)" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif">Rp</text>
+            <circle cx="30" cy="26" r="4" fill="oklch(0.88 0.10 85 / 0.7)"/>
+            <circle cx="140" cy="34" r="3" fill="white" opacity="0.5"/>
+          </svg>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:11.5px;font-weight:600;color:oklch(0.88 0.04 235);">Total Budget Bulan Ini</div>
+            <div id="totalBudgetAmt" style="font-size:22px;font-weight:800;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;margin-top:4px;letter-spacing:-.3px;">-</div>
+            <div style="font-size:11.5px;color:oklch(0.88 0.04 235);margin-top:4px;">Terpakai <span id="totalBudgetPct">0</span>% dari limit</div>
+          </div>
+        </div>
         <div class="card">
           <div class="card-head"><h2><svg width="16" height="16"><use href="#ic-budget"/></svg>Periode Budget</h2></div>
           <p class="card-desc">Menentukan siklus limit &amp; laporan. Akhir periode dihitung otomatis (mulai − 1 hari) di bulan berikutnya, jadi tidak perlu diisi terpisah.</p>
@@ -381,11 +428,18 @@
       </section>
 
       <section class="view" data-view="transaksi" hidden>
-        <div class="card">
-          <div class="card-head"><h2>Riwayat Transaksi</h2></div>
-          <div class="tx-head"><span>Tanggal</span><span>Kategori</span><span style="text-align:right">Jumlah</span><span>Catatan</span></div>
-          <div id="txList"><div class="empty">Memuat...</div></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-size:19px;font-weight:800;color:var(--ink);font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-.2px;">Transaksi</span>
+          <div style="width:36px;height:36px;border-radius:12px;background:var(--surface);box-shadow:0 2px 8px oklch(0.4 0.03 255 / 0.08);display:flex;align-items:center;justify-content:center;" title="Pencarian belum tersedia">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="6.5" stroke="var(--ink-2)" stroke-width="1.8"/><line x1="14" y1="14" x2="18" y2="18" stroke="var(--ink-2)" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
         </div>
+        <div style="display:flex;gap:8px;margin-top:16px;" title="Filter belum tersedia">
+          <div style="padding:9px 16px;border-radius:12px;background:var(--accent);font-size:12.5px;font-weight:700;color:#fff;min-height:36px;display:flex;align-items:center;">Semua</div>
+          <div style="padding:9px 16px;border-radius:12px;background:var(--surface);box-shadow:0 2px 8px oklch(0.4 0.03 255 / 0.06);font-size:12.5px;font-weight:600;color:var(--ink-2);min-height:36px;display:flex;align-items:center;">Masuk</div>
+          <div style="padding:9px 16px;border-radius:12px;background:var(--surface);box-shadow:0 2px 8px oklch(0.4 0.03 255 / 0.06);font-size:12.5px;font-weight:600;color:var(--ink-2);min-height:36px;display:flex;align-items:center;">Keluar</div>
+        </div>
+        <div id="txList" style="margin-top:14px;"><div class="empty">Memuat...</div></div>
       </section>
 
       <section class="view" data-view="laporan" hidden>
@@ -414,27 +468,36 @@
   </nav>
 </div>
 
-<button class="fab" id="btnAdd" title="Tambah transaksi">+</button>
+<button class="fab" id="btnAdd" title="Tambah transaksi">
+  <svg width="20" height="20" viewBox="0 0 20 20"><rect x="8.6" y="2" width="2.8" height="16" rx="1.4" fill="currentColor"/><rect x="2" y="8.6" width="16" height="2.8" rx="1.4" fill="currentColor"/></svg>
+</button>
 
 <dialog id="txDialog">
   <h2>Tambah Transaksi</h2>
   <form id="txForm">
     <div class="seg">
-      <button type="button" id="btnIn" class="active in">Pemasukan</button>
-      <button type="button" id="btnOut" class="out">Pengeluaran</button>
+      <button type="button" id="btnOut" class="active out">Pengeluaran</button>
+      <button type="button" id="btnIn" class="in">Pemasukan</button>
     </div>
+
+    <div style="text-align:center;margin:22px 0 18px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Nominal (Rp)</div>
+      <input id="fJumlah" type="text" inputmode="numeric" placeholder="0" required
+        style="border:0;background:none;min-height:auto;padding:0;width:100%;text-align:center;font-size:34px;font-weight:800;color:var(--ink);font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-.5px;">
+    </div>
+
     <label>Kategori</label>
-    <select id="fKategori"></select>
+    <select id="fKategori" style="display:none"></select>
+    <div id="fKategoriGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:4px;"></div>
     <input id="fKategoriCustom" placeholder="Nama kategori">
-    <label>Jumlah (Rp)</label>
-    <input id="fJumlah" type="text" inputmode="numeric" placeholder="0" required>
+
     <label>Tanggal</label>
     <input id="fTanggal" type="date">
     <label>Catatan (opsional)</label>
     <input id="fCatatan" placeholder="mis. beli bensin">
     <div class="form-actions">
       <button type="button" class="btn-cancel" id="btnCancel">Batal</button>
-      <button type="submit" class="btn-submit">Simpan</button>
+      <button type="submit" class="btn-submit">Simpan Transaksi</button>
     </div>
   </form>
 </dialog>
@@ -503,9 +566,21 @@
     i = incomeCategories.findIndex(b => b.kategori === kategori);
     return i === -1 ? 'var(--muted)' : CAT_COLORS[i % CAT_COLORS.length];
   }
-  function avatar(kategori, color){
-    const initial = (kategori || '?').trim().charAt(0).toUpperCase();
-    return `<span class="avatar" style="background:color-mix(in oklch, ${color} 20%, white);color:${color}">${initial}</span>`;
+  const CATEGORY_ICON_PATHS = {
+    'Uang Jajan': c => `<path d="M10 3l1.6 4.6 4.9.4-3.7 3.2 1.2 4.8L10 13.5l-4 2.5 1.2-4.8-3.7-3.2 4.9-.4Z" fill="${c}"/>`,
+    'Nafkah Istri': c => `<path d="M10 16s-6-3.7-6-8.2C4 5 6 3.3 8 4.2c.9.4 1.6 1.2 2 2 .4-.8 1.1-1.6 2-2 2-.9 4 .8 4 3.6C16 12.3 10 16 10 16Z" fill="${c}"/>`,
+    'Uang Transportasi (4 Work Days/Week)': c => `<rect x="3" y="9" width="14" height="5" rx="1.4" stroke="${c}" stroke-width="1.6" fill="none"/><circle cx="6.5" cy="15.5" r="1.6" fill="${c}"/><circle cx="13.5" cy="15.5" r="1.6" fill="${c}"/><path d="M4 9l1.5-4h9L16 9" stroke="${c}" stroke-width="1.6" fill="none"/>`,
+    'Internet Wifi': c => `<path d="M4 12a8 4 0 0 1 12 0" stroke="${c}" stroke-width="1.6" stroke-linecap="round" fill="none"/><path d="M6 9a5.5 3 0 0 1 8 0" stroke="${c}" stroke-width="1.6" stroke-linecap="round" fill="none"/><circle cx="10" cy="14" r="1.4" fill="${c}"/>`,
+    'Internet Paket Data': c => `<path d="M4 12a8 4 0 0 1 12 0" stroke="${c}" stroke-width="1.6" stroke-linecap="round" fill="none"/><path d="M6 9a5.5 3 0 0 1 8 0" stroke="${c}" stroke-width="1.6" stroke-linecap="round" fill="none"/><circle cx="10" cy="14" r="1.4" fill="${c}"/>`,
+    'Gaji': c => `<path d="M10 12V4M6 8l4-4 4 4" stroke="${c}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/><rect x="4" y="14" width="12" height="2.4" rx="1.2" fill="${c}"/>`
+  };
+  function avatar(kategori, color, size, radius){
+    size = size || 40; radius = radius || 12;
+    const iconFn = CATEGORY_ICON_PATHS[kategori];
+    const inner = iconFn
+      ? `<svg width="${Math.round(size * 0.45)}" height="${Math.round(size * 0.45)}" viewBox="0 0 20 20" fill="none">${iconFn(color)}</svg>`
+      : (kategori || '?').trim().charAt(0).toUpperCase();
+    return `<span class="avatar" style="width:${size}px;height:${size}px;border-radius:${radius}px;background:color-mix(in oklch, ${color} 18%, white);color:${color}">${inner}</span>`;
   }
   function toast(msg, ok){
     const t = document.getElementById('toast');
@@ -524,7 +599,8 @@
 
   // ---------- tx dialog ----------
   document.getElementById('fTanggal').valueAsDate = new Date();
-  document.getElementById('btnAdd').onclick = () => { setTipe('Pemasukan'); txDialog.showModal(); };
+  document.getElementById('btnAdd').onclick = () => { setTipe('Pengeluaran'); txDialog.showModal(); };
+  document.getElementById('btnQuickAdd').onclick = () => { setTipe('Pengeluaran'); txDialog.showModal(); };
   document.getElementById('btnCancel').onclick = () => txDialog.close();
   document.getElementById('btnIn').onclick = () => setTipe('Pemasukan');
   document.getElementById('btnOut').onclick = () => setTipe('Pengeluaran');
@@ -539,27 +615,52 @@
     document.getElementById('btnOut').classList.toggle('active', tipe==='Pengeluaran');
     renderKategoriOptions();
   }
+  function renderKategoriGrid(list){
+    const grid = document.getElementById('fKategoriGrid');
+    const sel = document.getElementById('fKategori');
+    grid.innerHTML = list.map((b, i) => {
+      const color = CAT_COLORS[i % CAT_COLORS.length];
+      const selected = sel.value === b.kategori;
+      const iconColor = selected ? '#fff' : color;
+      const bg = selected ? color : `color-mix(in oklch, ${color} 18%, white)`;
+      const iconFn = CATEGORY_ICON_PATHS[b.kategori];
+      const inner = iconFn
+        ? `<svg width="24" height="24" viewBox="0 0 20 20" fill="none">${iconFn(iconColor)}</svg>`
+        : b.kategori.trim().charAt(0).toUpperCase();
+      return `<button type="button" class="kategori-tile" data-kategori="${b.kategori}" style="display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;padding:0;font-family:inherit;cursor:pointer;">
+        <span class="avatar" style="width:52px;height:52px;border-radius:15px;background:${bg};color:${iconColor}">${inner}</span>
+        <span style="font-size:10.5px;font-weight:600;color:${selected ? 'var(--ink)' : 'var(--ink-2)'};overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:64px;">${b.kategori}</span>
+      </button>`;
+    }).join('');
+    grid.querySelectorAll('[data-kategori]').forEach(btn => {
+      btn.onclick = () => { sel.value = btn.dataset.kategori; renderKategoriGrid(list); };
+    });
+  }
+
   function renderKategoriOptions(){
     const sel = document.getElementById('fKategori');
+    const grid = document.getElementById('fKategoriGrid');
     const custom = document.getElementById('fKategoriCustom');
     const list = currentTipe === 'Pengeluaran' ? budgets : incomeCategories;
     sel.innerHTML = '';
+    list.forEach(b => {
+      const opt = document.createElement('option');
+      opt.value = b.kategori; opt.textContent = b.kategori;
+      sel.appendChild(opt);
+    });
     if (list.length){
-      list.forEach(b => {
-        const opt = document.createElement('option');
-        opt.value = b.kategori; opt.textContent = b.kategori;
-        sel.appendChild(opt);
-      });
-      sel.style.display = ''; custom.style.display = 'none';
+      if (!list.some(b => b.kategori === sel.value)) sel.value = list[0].kategori;
+      renderKategoriGrid(list);
+      grid.style.display = ''; custom.style.display = 'none';
     } else {
-      sel.style.display = 'none'; custom.style.display = '';
+      grid.innerHTML = ''; grid.style.display = 'none'; custom.style.display = '';
     }
   }
 
   document.getElementById('txForm').addEventListener('submit', async e => {
     e.preventDefault();
     const selKategori = document.getElementById('fKategori');
-    const kategori = selKategori.style.display !== 'none'
+    const kategori = document.getElementById('fKategoriGrid').style.display !== 'none'
       ? selKategori.value
       : document.getElementById('fKategoriCustom').value;
     const payload = {
@@ -615,7 +716,7 @@
     if (!list.length){ el.innerHTML = '<div class="empty">Belum ada kategori.</div>'; return; }
     el.innerHTML = list.map((b, i) => `
       <div class="crud-row">
-        <span class="cat"><span class="dot" style="background:${CAT_COLORS[i % CAT_COLORS.length]}"></span><span class="name">${b.kategori}</span></span>
+        <span class="cat">${avatar(b.kategori, CAT_COLORS[i % CAT_COLORS.length], 32, 10)}<span class="name">${b.kategori}</span></span>
         ${tipe === 'Pengeluaran' ? `<span class="lim">${idr(b.limit)}</span>` : ''}
         <button class="icon-btn" data-edit="${b.id}" title="Edit"><svg width="16" height="16"><use href="#ic-edit"/></svg></button>
         <button class="icon-btn danger" data-del="${b.id}" title="Hapus"><svg width="16" height="16"><use href="#ic-trash"/></svg></button>
@@ -681,8 +782,11 @@
       const color = CAT_COLORS[budgets.indexOf(b) % CAT_COLORS.length];
       const pct = (b.terpakai / max) * 100;
       return `<div class="chart-row">
-        <div class="chart-label">${avatar(b.kategori, color)}<span class="name">${b.kategori}</span></div>
-        <div class="chart-track"><div class="chart-fill" style="width:${pct}%;background:${color}"></div></div>
+        ${avatar(b.kategori, color)}
+        <div class="chart-label">
+          <span class="name">${b.kategori}</span>
+          <div class="chart-track"><div class="chart-fill" style="width:${pct}%;background:${color}"></div></div>
+        </div>
         <div class="chart-value">${idr(b.terpakai)}</div>
       </div>`;
     }).join('');
@@ -693,31 +797,51 @@
     if (!list.length){ el.innerHTML = '<div class="empty">Belum ada data budget.</div>'; return; }
     el.innerHTML = list.map((b, i) => {
       const pct = b.limit > 0 ? Math.min(100, (b.terpakai / b.limit) * 100) : 0;
-      const realPct = b.limit > 0 ? Math.round((b.terpakai / b.limit) * 100) : 0;
       const over = b.terpakai > b.limit;
       const warn = !over && pct >= 80;
       const fillColor = over ? 'var(--critical)' : (warn ? 'var(--warning)' : 'var(--blue)');
+      const overNote = over ? `<div class="budget-over-note">
+        <svg width="12" height="12" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" stroke="var(--critical)" stroke-width="1.6" fill="none"/><line x1="8" y1="5" x2="8" y2="9" stroke="var(--critical)" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="11" r="0.8" fill="var(--critical)"/></svg>
+        <span>Lewat limit ${idr(b.terpakai - b.limit)}</span>
+      </div>` : '';
       return `<div class="budget-item">
         <div class="budget-top">
-          <span class="cat">${avatar(b.kategori, CAT_COLORS[i % CAT_COLORS.length])}<span class="name">${b.kategori}</span></span>
-          <span class="amt">${idr(b.terpakai)} / ${idr(b.limit)}</span>
+          <span class="cat">${avatar(b.kategori, CAT_COLORS[i % CAT_COLORS.length], 32, 10)}<span class="name">${b.kategori}</span></span>
+          <span class="amt">${idr(b.terpakai)} <span class="of">/ ${idr(b.limit)}</span></span>
         </div>
         <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${fillColor}"></div></div>
-        <div class="budget-pct">${realPct}%</div>
+        ${overNote}
       </div>`;
     }).join('');
+  }
+
+  function txGroupLabel(tanggal){
+    const d = new Date(tanggal + 'T00:00:00');
+    const today = new Date(); today.setHours(0,0,0,0);
+    const yesterday = new Date(today); yesterday.setDate(yesterday.getDate() - 1);
+    if (d.getTime() === today.getTime()) return 'Hari Ini';
+    if (d.getTime() === yesterday.getTime()) return 'Kemarin';
+    return fmtDate(tanggal);
   }
 
   function renderTx(list){
     const el = document.getElementById('txList');
     if (!list.length){ el.innerHTML = '<div class="empty">Belum ada transaksi.</div>'; return; }
-    el.innerHTML = list.map(t => `
-      <div class="tx-row">
-        <div class="tx-date">${t.tanggal}</div>
-        <div class="tx-cat"><span class="dot" style="background:${t.tipe==='Pemasukan' ? 'var(--good)' : catColor(t.kategori)}"></span><span class="name">${t.kategori}</span></div>
+    let lastGroup = null;
+    el.innerHTML = list.map(t => {
+      const group = txGroupLabel(t.tanggal);
+      const heading = group !== lastGroup ? `<div class="tx-group-label">${group}</div>` : '';
+      lastGroup = group;
+      const color = t.tipe === 'Pemasukan' ? 'var(--good)' : catColor(t.kategori);
+      return `${heading}<div class="tx-row">
+        ${avatar(t.kategori, color, 44, 13)}
+        <div class="tx-cat">
+          <div class="name">${t.kategori}</div>
+          ${t.catatan ? `<div class="tx-note">${t.catatan}</div>` : ''}
+        </div>
         <div class="tx-amt ${t.tipe==='Pemasukan'?'in':'out'}">${t.tipe==='Pemasukan'?'+':'-'}${idr(t.jumlah)}</div>
-        <div class="tx-note">${t.catatan || ''}</div>
-      </div>`).join('');
+      </div>`;
+    }).join('');
   }
 
   function renderReport(){
@@ -763,6 +887,13 @@
   });
 
   // ---------- load ----------
+  function renderBudgetSummary(){
+    const totalLimit = budgets.reduce((s, b) => s + b.limit, 0);
+    const totalTerpakai = budgets.reduce((s, b) => s + b.terpakai, 0);
+    document.getElementById('totalBudgetAmt').textContent = idr(totalLimit);
+    document.getElementById('totalBudgetPct').textContent = totalLimit > 0 ? Math.round((totalTerpakai / totalLimit) * 100) : 0;
+  }
+
   async function loadData(){
     try {
       const data = await api('/api/data');
@@ -771,6 +902,7 @@
       renderStats(data);
       renderChart();
       renderBudgets(budgets);
+      renderBudgetSummary();
       renderCrudList('incomeCrud', incomeCategories, 'Pemasukan');
       renderCrudList('budgetCrud', budgets, 'Pengeluaran');
       renderTx(data.transactions);
