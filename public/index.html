@@ -100,9 +100,14 @@
 
   /* ---------- shared cards ---------- */
   .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;}
-  .stat{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:16px;}
-  .stat .label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;}
-  .stat .val{font-size:26px;font-weight:700;margin-top:6px;font-variant-numeric:tabular-nums;}
+  .stat{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:16px;min-width:0;container-type:inline-size;}
+  .stat .label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .stat .val{
+    font-size:20px; /* fallback kalau browser belum dukung container query units */
+    font-size:clamp(15px, 11cqw, 26px);
+    font-weight:700;margin-top:6px;font-variant-numeric:tabular-nums;
+    overflow-wrap:anywhere;line-height:1.15;
+  }
   .stat.masuk .val{color:var(--good);}
   .stat.keluar .val{color:var(--ink);}
   .stat.saldo .val{color:var(--blue);}
@@ -120,13 +125,13 @@
   .dot{width:8px;height:8px;border-radius:50%;flex:none;}
 
   /* ---------- dashboard chart ---------- */
-  .chart-row{display:grid;grid-template-columns:130px 1fr 96px;gap:10px;align-items:center;margin-bottom:11px;}
+  .chart-row{display:grid;grid-template-columns:minmax(60px,130px) 1fr minmax(0,auto);gap:10px;align-items:center;margin-bottom:11px;}
   .chart-row:last-child{margin-bottom:0;}
   .chart-label{display:flex;align-items:center;gap:7px;min-width:0;font-size:12.5px;font-weight:600;}
   .chart-label .name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .chart-track{height:18px;border-radius:4px;background:rgba(255,255,255,0.06);overflow:hidden;}
   .chart-fill{height:100%;border-radius:0 4px 4px 0;}
-  .chart-value{font-size:12px;text-align:right;color:var(--ink-2);font-variant-numeric:tabular-nums;}
+  .chart-value{min-width:0;font-size:12px;text-align:right;color:var(--ink-2);font-variant-numeric:tabular-nums;overflow-wrap:anywhere;}
 
   /* ---------- budget list / crud ---------- */
   .budget-item{margin-bottom:14px;}
