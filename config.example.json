@@ -1,0 +1,11 @@
+{
+  "host": "127.0.0.1",
+  "port": 3307,
+  "user": "keuangan_app",
+  "password": "GANTI_PASSWORD_KUAT",
+  "database": "keuangan",
+
+  "loginUser": "GANTI_DENGAN_OUTPUT_hash-password.js",
+  "passwordSalt": "GANTI_DENGAN_OUTPUT_hash-password.js",
+  "passwordHash": "GANTI_DENGAN_OUTPUT_hash-password.js"
+}
