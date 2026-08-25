@@ -388,7 +388,7 @@
     <select id="fKategori"></select>
     <input id="fKategoriCustom" placeholder="Nama kategori">
     <label>Jumlah (Rp)</label>
-    <input id="fJumlah" type="number" inputmode="numeric" min="1" placeholder="0" required>
+    <input id="fJumlah" type="text" inputmode="numeric" placeholder="0" required>
     <label>Tanggal</label>
     <input id="fTanggal" type="date">
     <label>Catatan (opsional)</label>
@@ -407,7 +407,7 @@
     <input id="bKategori" required>
     <div id="bLimitWrap">
       <label>Limit Bulanan (Rp)</label>
-      <input id="bLimit" type="number" inputmode="numeric" min="1">
+      <input id="bLimit" type="text" inputmode="numeric">
     </div>
     <div class="form-actions">
       <button type="button" class="btn-cancel" id="btnBudgetCancel">Batal</button>
@@ -421,6 +421,15 @@
 <script>
   const idr = n => new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(n||0);
   const fmtDate = s => new Date(s + 'T00:00:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+  const unmask = str => Number(String(str || '').replace(/\D/g, ''));
+  function attachThousandMask(input){
+    input.addEventListener('input', () => {
+      const digits = input.value.replace(/\D/g, '');
+      input.value = digits ? Number(digits).toLocaleString('id-ID') : '';
+    });
+  }
+  attachThousandMask(document.getElementById('fJumlah'));
+  attachThousandMask(document.getElementById('bLimit'));
   const CAT_COLORS = ['var(--blue)','var(--orange)','var(--aqua)','var(--yellow)','var(--magenta)','var(--green)','var(--violet)','var(--red)'];
   const VIEWS = ['dashboard','budget','transaksi','laporan'];
   const TITLES = { dashboard: 'Dashboard', budget: 'Setting Budget', transaksi: 'Transaksi', laporan: 'Laporan' };
@@ -509,7 +518,7 @@
     const payload = {
       tipe: currentTipe,
       kategori,
-      jumlah: Number(document.getElementById('fJumlah').value),
+      jumlah: unmask(document.getElementById('fJumlah').value),
       tanggal: document.getElementById('fTanggal').value,
       catatan: document.getElementById('fCatatan').value
     };
@@ -546,7 +555,7 @@
     document.getElementById('bLimit').required = tipe === 'Pengeluaran';
     if (existing){
       document.getElementById('bKategori').value = existing.kategori;
-      if (tipe === 'Pengeluaran') document.getElementById('bLimit').value = existing.limit;
+      if (tipe === 'Pengeluaran') document.getElementById('bLimit').value = Number(existing.limit).toLocaleString('id-ID');
     }
     budgetDialog.showModal();
   }
@@ -585,7 +594,7 @@
     const payload = {
       kategori: document.getElementById('bKategori').value.trim(),
       tipe: editingBudgetTipe,
-      limit: editingBudgetTipe === 'Pengeluaran' ? Number(document.getElementById('bLimit').value) : null
+      limit: editingBudgetTipe === 'Pengeluaran' ? unmask(document.getElementById('bLimit').value) : null
     };
     const btn = e.target.querySelector('.btn-submit');
     btn.disabled = true; btn.textContent = 'Menyimpan...';
