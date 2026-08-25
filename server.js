@@ -137,7 +137,7 @@ app.get('/api/data', async (req, res) => {
       [startStr, endStr]
     );
     const [tx] = await pool.query(
-      'SELECT tanggal, tipe, kategori, jumlah, catatan, created_at FROM transactions WHERE tanggal BETWEEN ? AND ? ORDER BY tanggal DESC, id DESC LIMIT 500',
+      'SELECT id, tanggal, tipe, kategori, jumlah, catatan, created_at FROM transactions WHERE tanggal BETWEEN ? AND ? ORDER BY tanggal DESC, id DESC LIMIT 500',
       [startStr, endStr]
     );
 
@@ -163,6 +163,7 @@ app.get('/api/data', async (req, res) => {
 
     res.json({
       transactions: tx.map(t => ({
+        id: t.id,
         tanggal: toDateStr(t.tanggal),
         tipe: t.tipe,
         kategori: t.kategori,
