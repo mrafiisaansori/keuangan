@@ -191,6 +191,24 @@
   .report-table td:first-child{text-align:left;font-weight:600;font-variant-numeric:normal;}
   .report-table tfoot td{border-top:1px solid var(--border);border-bottom:0;font-weight:700;color:var(--ink);}
   .report-table .over{color:var(--critical);}
+  @media (max-width: 560px){
+    .report-table thead{display:none;}
+    .report-table, .report-table tbody, .report-table tfoot, .report-table tr, .report-table td{display:block;width:100%;}
+    .report-table tr{padding:10px 0;border-bottom:1px solid var(--hairline);}
+    .report-table tfoot tr{border-top:1px solid var(--border);border-bottom:0;margin-top:4px;padding-top:12px;}
+    .report-table td{
+      display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+      border-bottom:0;padding:3px 0;
+    }
+    .report-table td::before{
+      content:attr(data-label);font-size:10.5px;text-transform:uppercase;
+      letter-spacing:.5px;color:var(--muted);font-weight:600;flex:none;
+    }
+    .report-table td:first-child{
+      display:block;font-size:14px;padding-bottom:6px;
+    }
+    .report-table td:first-child::before{content:none;}
+  }
 
   /* ---------- fab + dialogs ---------- */
   .fab{
@@ -359,7 +377,7 @@
             <table class="report-table">
               <thead><tr><th>Kategori</th><th>Limit</th><th>Terpakai</th><th>Sisa</th><th>%</th></tr></thead>
               <tbody id="reportBody"></tbody>
-              <tfoot><tr><td>Total</td><td id="repTotalLimit">-</td><td id="repTotalTerpakai">-</td><td id="repTotalSisa">-</td><td></td></tr></tfoot>
+              <tfoot><tr><td>Total</td><td data-label="Limit" id="repTotalLimit">-</td><td data-label="Terpakai" id="repTotalTerpakai">-</td><td data-label="Sisa" id="repTotalSisa">-</td></tr></tfoot>
             </table>
           </div>
         </div>
@@ -683,10 +701,10 @@
       const over = b.terpakai > b.limit;
       return `<tr>
         <td>${b.kategori}</td>
-        <td>${idr(b.limit)}</td>
-        <td class="${over ? 'over' : ''}">${idr(b.terpakai)}</td>
-        <td>${idr(b.sisa)}</td>
-        <td class="${over ? 'over' : ''}">${pct}%</td>
+        <td data-label="Limit">${idr(b.limit)}</td>
+        <td data-label="Terpakai" class="${over ? 'over' : ''}">${idr(b.terpakai)}</td>
+        <td data-label="Sisa">${idr(b.sisa)}</td>
+        <td data-label="%" class="${over ? 'over' : ''}">${pct}%</td>
       </tr>`;
     }).join('');
     document.getElementById('repTotalLimit').textContent = idr(totalLimit);
