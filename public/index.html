@@ -173,13 +173,6 @@
   .icon-btn:hover{background:var(--surface-2);color:var(--ink);}
   .icon-btn.danger:hover{color:var(--critical);background:oklch(0.62 0.19 25 / 0.12);}
 
-  .filter-pill{
-    padding:9px 16px;border-radius:12px;background:var(--surface);
-    box-shadow:0 2px 8px oklch(0.4 0.03 255 / 0.06);border:0;
-    font-size:12.5px;font-weight:600;color:var(--ink-2);min-height:36px;
-    display:flex;align-items:center;cursor:pointer;font-family:inherit;
-  }
-  .filter-pill.active{background:var(--accent);color:#fff;font-weight:700;box-shadow:none;}
 
   /* ---------- transaksi list ---------- */
   .tx-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--hairline);}
@@ -248,6 +241,7 @@
   form{display:flex;flex-direction:column;gap:10px;}
   .seg{display:flex;background:var(--page);border-radius:12px;padding:4px;border:1px solid var(--border);}
   .seg button{flex:1;min-height:44px;border:0;background:transparent;color:var(--muted);padding:12px 9px;border-radius:9px;font-size:13px;font-weight:600;}
+  .seg button.active{background:var(--accent);color:#fff;}
   .seg button.active.in{background:var(--good);color:#fff;}
   .seg button.active.out{background:var(--critical);color:#fff;}
   label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:-4px;}
@@ -452,12 +446,14 @@
       </section>
 
       <section class="view" data-view="transaksi" hidden>
-        <div style="display:flex;gap:8px;">
-          <button type="button" class="filter-pill active" data-filter="Semua">Semua</button>
-          <button type="button" class="filter-pill" data-filter="Pemasukan">Masuk</button>
-          <button type="button" class="filter-pill" data-filter="Pengeluaran">Keluar</button>
+        <div class="card">
+          <div class="seg" style="margin-bottom:10px;">
+            <button type="button" class="active" data-filter="Semua">Semua</button>
+            <button type="button" data-filter="Pemasukan">Masuk</button>
+            <button type="button" data-filter="Pengeluaran">Keluar</button>
+          </div>
+          <div id="txList"><div class="empty">Memuat...</div></div>
         </div>
-        <div id="txList" style="margin-top:14px;"><div class="empty">Memuat...</div></div>
       </section>
 
       <section class="view" data-view="laporan" hidden>
@@ -843,10 +839,10 @@
     return fmtDate(tanggal);
   }
 
-  document.querySelectorAll('.filter-pill').forEach(btn => {
+  document.querySelectorAll('[data-filter]').forEach(btn => {
     btn.onclick = () => {
       txFilter = btn.dataset.filter;
-      document.querySelectorAll('.filter-pill').forEach(b => b.classList.toggle('active', b === btn));
+      document.querySelectorAll('[data-filter]').forEach(b => b.classList.toggle('active', b === btn));
       renderTx(allTransactions);
     };
   });
