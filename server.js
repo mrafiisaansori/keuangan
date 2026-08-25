@@ -265,4 +265,5 @@ app.delete('/api/budgets/:id', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3001; // 3000 dipakai project lain di laptop ini
-app.listen(PORT, () => console.log(`Jalan di http://localhost:${PORT}`));
+const HOST = process.env.HOST || '127.0.0.1'; // localhost only; expose lewat reverse proxy (Nginx), bukan langsung
+app.listen(PORT, HOST, () => console.log(`Jalan di http://${HOST}:${PORT}`));
