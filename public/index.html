@@ -256,6 +256,9 @@
     background:oklch(0.97 0.002 255);color:var(--ink);font-size:15px;outline:none;
   }
   input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px oklch(0.52 0.14 235 / 0.18);}
+  .select-wrap{position:relative;}
+  .select-wrap select{appearance:none;-webkit-appearance:none;padding-right:36px;cursor:pointer;}
+  .select-wrap .select-chevron{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;}
   .form-actions{display:flex;gap:10px;margin-top:4px;}
   .btn-cancel{flex:1;min-height:44px;border:1px solid var(--border);background:transparent;color:var(--ink-2);padding:12px;border-radius:12px;font-size:13px;font-weight:600;}
   .btn-submit{flex:2;min-height:44px;border:0;padding:12px;border-radius:12px;font-size:13px;font-weight:700;
@@ -522,8 +525,10 @@
     </div>
 
     <label>Kategori</label>
-    <select id="fKategori" style="display:none"></select>
-    <div id="fKategoriGrid" style="display:flex;flex-wrap:wrap;gap:12px 10px;margin-bottom:4px;"></div>
+    <div class="select-wrap" id="fKategoriWrap">
+      <select id="fKategori"></select>
+      <svg class="select-chevron" width="14" height="14" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+    </div>
     <input id="fKategoriCustom" placeholder="Nama kategori">
 
     <label>Tanggal</label>
@@ -653,31 +658,9 @@
     document.getElementById('btnOut').classList.toggle('active', tipe==='Pengeluaran');
     renderKategoriOptions();
   }
-  function renderKategoriGrid(list){
-    const grid = document.getElementById('fKategoriGrid');
-    const sel = document.getElementById('fKategori');
-    grid.innerHTML = list.map((b, i) => {
-      const color = CAT_COLORS[i % CAT_COLORS.length];
-      const selected = sel.value === b.kategori;
-      const iconColor = selected ? '#fff' : color;
-      const bg = selected ? color : `color-mix(in oklch, ${color} 18%, white)`;
-      const iconFn = CATEGORY_ICON_PATHS[b.kategori];
-      const inner = iconFn
-        ? `<svg width="24" height="24" viewBox="0 0 20 20" fill="none">${iconFn(iconColor)}</svg>`
-        : b.kategori.trim().charAt(0).toUpperCase();
-      return `<button type="button" class="kategori-tile" data-kategori="${b.kategori}" style="flex:0 0 68px;display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;padding:0;font-family:inherit;cursor:pointer;">
-        <span class="avatar" style="width:52px;height:52px;border-radius:15px;background:${bg};color:${iconColor};font-size:21px">${inner}</span>
-        <span style="font-size:10.5px;font-weight:600;color:${selected ? 'var(--ink)' : 'var(--ink-2)'};overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:64px;">${b.kategori}</span>
-      </button>`;
-    }).join('');
-    grid.querySelectorAll('[data-kategori]').forEach(btn => {
-      btn.onclick = () => { sel.value = btn.dataset.kategori; renderKategoriGrid(list); };
-    });
-  }
-
   function renderKategoriOptions(){
     const sel = document.getElementById('fKategori');
-    const grid = document.getElementById('fKategoriGrid');
+    const wrap = document.getElementById('fKategoriWrap');
     const custom = document.getElementById('fKategoriCustom');
     const list = currentTipe === 'Pengeluaran' ? budgets : incomeCategories;
     sel.innerHTML = '';
@@ -687,18 +670,16 @@
       sel.appendChild(opt);
     });
     if (list.length){
-      if (!list.some(b => b.kategori === sel.value)) sel.value = list[0].kategori;
-      renderKategoriGrid(list);
-      grid.style.display = ''; custom.style.display = 'none';
+      wrap.style.display = ''; custom.style.display = 'none';
     } else {
-      grid.innerHTML = ''; grid.style.display = 'none'; custom.style.display = '';
+      wrap.style.display = 'none'; custom.style.display = '';
     }
   }
 
   document.getElementById('txForm').addEventListener('submit', async e => {
     e.preventDefault();
     const selKategori = document.getElementById('fKategori');
-    const kategori = document.getElementById('fKategoriGrid').style.display !== 'none'
+    const kategori = document.getElementById('fKategoriWrap').style.display !== 'none'
       ? selKategori.value
       : document.getElementById('fKategoriCustom').value;
     const payload = {
