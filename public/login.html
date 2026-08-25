@@ -4,41 +4,43 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Masuk — Catatan Keuangan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --page:      oklch(0.17 0.006 255);
-    --surface:   oklch(0.22 0.008 255);
-    --surface-2: oklch(0.27 0.010 255);
-    --ink:       oklch(0.96 0.004 255);
-    --ink-2:     oklch(0.80 0.008 255);
-    --muted:     oklch(0.64 0.012 255);
-    --hairline:  oklch(0.28 0.010 255);
-    --border:    oklch(0.96 0.004 255 / 0.10);
+    --page:      oklch(0.93 0.003 255);
+    --surface:   oklch(0.99 0 0);
+    --surface-2: oklch(0.955 0.004 255);
+    --ink:       oklch(0.22 0.01 255);
+    --ink-2:     oklch(0.45 0.01 255);
+    --muted:     oklch(0.55 0.01 255);
+    --hairline:  oklch(0.91 0.004 255);
+    --border:    oklch(0.4 0.03 255 / 0.08);
 
-    --accent:    oklch(0.68 0.13 255);
+    --accent:    oklch(0.52 0.14 235);
 
-    --blue:      oklch(0.72 0.11 255);
-    --orange:    oklch(0.72 0.11 40);
-    --aqua:      oklch(0.72 0.11 165);
-    --yellow:    oklch(0.72 0.11 90);
-    --magenta:   oklch(0.72 0.11 330);
-    --green:     oklch(0.72 0.11 145);
-    --violet:    oklch(0.72 0.11 300);
-    --red:       oklch(0.72 0.11 20);
+    --blue:      oklch(0.52 0.14 235);
+    --orange:    oklch(0.60 0.14 55);
+    --aqua:      oklch(0.55 0.11 165);
+    --yellow:    oklch(0.72 0.14 75);
+    --magenta:   oklch(0.62 0.13 340);
+    --green:     oklch(0.50 0.14 152);
+    --violet:    oklch(0.55 0.12 300);
+    --red:       oklch(0.62 0.19 25);
 
-    --good:      oklch(0.70 0.14 152);
-    --warning:   oklch(0.78 0.15 85);
-    --serious:   oklch(0.70 0.17 45);
-    --critical:  oklch(0.64 0.19 25);
+    --good:      oklch(0.50 0.14 152);
+    --warning:   oklch(0.72 0.14 75);
+    --serious:   oklch(0.60 0.16 45);
+    --critical:  oklch(0.62 0.19 25);
   }
   *{box-sizing:border-box;}
   body{
     margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
-    font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
-    background:
-      radial-gradient(circle at 20% 10%, oklch(0.68 0.13 255 / 0.16), transparent 45%),
-      radial-gradient(circle at 85% 25%, oklch(0.72 0.11 300 / 0.16), transparent 45%),
-      var(--page);
+    font-family:'Inter',-apple-system,system-ui,sans-serif;
+    background-color:var(--page);
+    background-image:radial-gradient(oklch(0.86 0.006 255) 1.4px, transparent 1.4px);
+    background-size:20px 20px;
     color:var(--ink);
     padding:20px;
   }
@@ -48,28 +50,28 @@
     border:1px solid var(--border);
     border-radius:20px;
     padding:28px 24px;
-    box-shadow:0 8px 30px rgba(0,0,0,0.5);
+    box-shadow:0 12px 40px oklch(0.4 0.03 255 / 0.1);
   }
-  h1{display:flex;align-items:center;gap:8px;font-size:18px;font-weight:700;margin:0 0 4px;color:var(--accent);}
+  h1{display:flex;align-items:center;gap:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;margin:0 0 4px;color:var(--accent);}
   p.sub{font-size:12px;color:var(--muted);margin:0 0 22px;}
   label{font-size:11px;color:var(--ink-2);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px;}
   .field{margin-bottom:14px;}
   input{
     width:100%;min-height:44px;padding:11px 12px;border-radius:12px;
-    border:1px solid var(--border);background:oklch(0.96 0.004 255 / 0.04);
+    border:1px solid var(--hairline);background:oklch(0.97 0.002 255);
     color:var(--ink);font-size:15px;outline:none;
   }
-  input:focus{border-color:var(--accent);box-shadow:0 0 0 3px oklch(0.68 0.13 255 / 0.2);}
+  input:focus{border-color:var(--accent);box-shadow:0 0 0 3px oklch(0.52 0.14 235 / 0.18);}
   button{
     width:100%;min-height:44px;margin-top:6px;border:0;padding:13px;border-radius:12px;
     font-size:14px;font-weight:700;letter-spacing:.3px;
-    background:var(--accent);color:oklch(0.17 0.006 255);
+    background:var(--accent);color:#fff;
   }
   button:disabled{opacity:.6;}
   .err{
     display:none;margin-top:14px;padding:10px 12px;border-radius:10px;
-    background:oklch(0.64 0.19 25 / 0.14);border:1px solid oklch(0.64 0.19 25 / 0.4);
-    color:oklch(0.82 0.10 25);font-size:13px;
+    background:oklch(0.62 0.19 25 / 0.1);border:1px solid oklch(0.62 0.19 25 / 0.3);
+    color:var(--critical);font-size:13px;
   }
   .err.show{display:block;}
 </style>
