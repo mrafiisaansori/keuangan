@@ -224,6 +224,16 @@ app.post('/api/transactions', async (req, res) => {
   }
 });
 
+app.delete('/api/transactions/:id', async (req, res) => {
+  try {
+    const [result] = await pool.execute('DELETE FROM transactions WHERE id = ?', [req.params.id]);
+    if (result.affectedRows === 0) return res.status(404).json({ error: 'Transaksi tidak ditemukan' });
+    res.json({ ok: true });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 app.post('/api/budgets', async (req, res) => {
   try {
     const { kategori, limit, tipe } = req.body || {};

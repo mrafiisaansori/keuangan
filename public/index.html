@@ -340,6 +340,9 @@
   .btn-submit{flex:2;min-height:44px;border:0;padding:12px;border-radius:12px;font-size:13px;font-weight:700;
     background:var(--accent);color:#fff;}
   .btn-submit:disabled{opacity:.6;}
+  .btn-danger{flex:1;min-height:44px;border:0;padding:12px;border-radius:12px;font-size:13px;font-weight:700;
+    background:var(--critical);color:#fff;}
+  .btn-danger:disabled{opacity:.6;}
 
   .toast{
     position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);
@@ -670,7 +673,8 @@
     <div class="tx-detail-row" id="txDetailCatatanRow"><span>Catatan</span><span id="txDetailCatatan"></span></div>
   </div>
   <div class="form-actions" style="margin-top:18px;">
-    <button type="button" class="btn-submit" id="btnTxDetailClose" style="flex:1;">Tutup</button>
+    <button type="button" class="btn-danger" id="btnTxDetailDelete">Hapus</button>
+    <button type="button" class="btn-cancel" id="btnTxDetailClose" style="flex:1;">Tutup</button>
   </div>
 </dialog>
 
@@ -1012,8 +1016,10 @@
   }
 
   const txDetailDialog = document.getElementById('txDetailDialog');
+  let txDetailCurrent = null;
   function openTxDetail(t){
     if (!t) return;
+    txDetailCurrent = t;
     const color = t.tipe === 'Pemasukan' ? 'var(--good)' : catColor(t.kategori);
     document.getElementById('txDetailAvatar').innerHTML = avatar(t.kategori, color, 52, 15);
     document.getElementById('txDetailAmt').textContent = (t.tipe === 'Pemasukan' ? '+' : '-') + idr(t.jumlah);
@@ -1026,6 +1032,22 @@
     txDetailDialog.showModal();
   }
   document.getElementById('btnTxDetailClose').onclick = () => txDetailDialog.close();
+  document.getElementById('btnTxDetailDelete').onclick = async () => {
+    if (!txDetailCurrent) return;
+    if (!confirm(`Hapus transaksi "${txDetailCurrent.kategori}" sebesar ${idr(txDetailCurrent.jumlah)}? Tidak bisa dibatalkan.`)) return;
+    const btn = document.getElementById('btnTxDetailDelete');
+    btn.disabled = true; btn.textContent = 'Menghapus...';
+    try {
+      await api(`/api/transactions/${txDetailCurrent.id}`, { method: 'DELETE' });
+      toast('Transaksi dihapus', true);
+      txDetailDialog.close();
+      loadData();
+    } catch (err) {
+      if (err.message !== 'redirect') toast('Gagal: ' + err.message);
+    } finally {
+      btn.disabled = false; btn.textContent = 'Hapus';
+    }
+  };
 
   function renderReport(){
     const body = document.getElementById('reportBody');
